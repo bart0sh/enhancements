@@ -120,13 +120,13 @@ Without structured output, even the most seemingly innocuous changes could break
   * `token list`
   * `upgrade plan`
   * `version`
+* Kubeadm output structures should be versioned
 
 ### Non-Goals
 
 * Explicit support for an unbuffered, *short* variant of *Text* output is not necessary at this time as the only command that currently supports this output type is `version`
-* [Parity with kubectl's `-o|--output` flag](#parity-with-kubectl-and-versioned-output)
-* [Versioned output](#parity-with-kubectl-and-versioned-output)
-* [Using the printers](#parity-with-kubectl-and-versioned-output) from the `kubernetes/cli-runtime` package
+* [Parity with kubectl's `-o|--output` flag](#parity-with-kubectl)
+* [Using the printers](#parity-with-kubectl) from the `kubernetes/cli-runtime` package
 
 ## Proposal
 
@@ -243,7 +243,7 @@ Please note that *buffered* and *unbuffered* relates to individual objects emitt
 
 For more clarificaton, please see [this example](https://play.golang.org/p/_CJLB7gdLZQ) that highlights how buffered printer output versus unbuffered printer output might behave in the context of this KEP.
 
-##### Parity with kubectl and versioned output
+##### Parity with kubectl
 
 Parity with kubectl is defined as support for all of the output formats currently available to kubectl's `-o|--output` flag:
 
@@ -258,8 +258,6 @@ Parity with kubectl is defined as support for all of the output formats currentl
   * `jsonpath-file`
 
 The natural path to such parity would be to use the same mechanism in kubeadm as used by kubectl, the API machinery package `k8s.io/cli-runtime/pkg/printers`. However, the printers require input objects of type `runtime.Object`.
-
-Creating new or converting existing kubeadm objects to Kubernetes API-style objects has the immediate effect of introducing versioned output to kubeadm. It's the shared opinion of the authors of this KEP that versioned output should be a non-goal. This does not indicate an opinion on the value of versioned output, but rather acknowledges that such a design decision requires a much broader discussion.
 
 ##### jq
 The program [`jq`](https://stedolan.github.io/jq/) is a performant, command-line solution for parsing and manipulating JSON.
@@ -312,10 +310,6 @@ The following JSON output is an example of running `kubeadm init -o json`:
 ```
 
 ### Risks and Mitigations
-
-**Risk**: Not including support for [versioned output](#parity-with-kubectl-and-versioned-output) in the stated [goals](#goals) could possibly result in an implied judgement of versioned output, when that's not the reasoning behind omitting it from this KEP.
-
-*Mitigation*: The [Alpha -> Beta](#alpha---beta-graduation) graduation criteria requires a thorough discussion about versioned output.
 
 **Risk**: At first glance it may appear this KEP breaks compatibility with the existing output format for `kubeadm token list`, but that's not the case. 
 
